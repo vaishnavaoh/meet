@@ -19,7 +19,7 @@ const credentials = {
   auth_uri: 'https://accounts.google.com/o/oauth2/auth',
   token_uri: 'https://oauth2.googleapis.com/token',
   auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs',
-  redirect_uris: ['https://vaishnavaohio.github.io/meet'],
+  redirect_uris: ['https://vaishnavaohio.github.io/meet/'],
   javascript_origins: [
     'https://vaishnavaohio.github.io',
     'http://localhost:3000',
@@ -32,34 +32,21 @@ const oAuth2Client = new google.auth.OAuth2(
   redirect_uris[0]
 );
 
-/**
- *
- * The first step in the OAuth process is to generate a URL so users can log in with
- * Google and be authorized to see your calendar. After logging in, they’ll receive a code
- * as a URL parameter.
- *
- */
-module.exports.getAuthURL = async () => {
-  /**
-   *
-   * Scopes array passed to the `scope` option. Any scopes passed must be enabled in the
-   * "OAuth consent screen" settings in your project on your Google Console. Also, any passed
-   *  scopes are the ones users will see when the consent screen is displayed to them.
-   *
-   */
+
+ module.exports.getAuthURL = async () => {
   const authUrl = oAuth2Client.generateAuthUrl({
-    access_type: 'offline',
-    scope: SCOPES,
+      access_type: "offline",
+      scope: SCOPES,
   });
 
   return {
-    statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-    },
-    body: JSON.stringify({
-      authUrl: authUrl,
-    }),
+      statusCode: 200,
+      headers: {
+          'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify({
+          authUrl: authUrl,
+      }),
   };
 };
 
@@ -104,44 +91,38 @@ module.exports.getCalendarEvents = async (event) => {
     client_secret,
     redirect_uris[0]
   );
-  const access_token = decodeURIComponent(
-    `${event.pathParameters.access_token}`
-  );
-  oAuth2Client.setCredentials({
-    access_token,
-  });
+    const access_token = decodeURIComponent(`${event.pathParameters.access_token}`);
+    oAuth2Client.setCredentials({ access_token });
 
-  return new Promise((resolve, reject) => {
-    calendar.events.list(
-      {
-        calendarId: calendar_id,
-        auth: oAuth2Client,
-        timeMin: new Date().toISOString(),
-        maxResults: 32,
-        singleEvents: true,
-        orderBy: 'startTime',
-      },
-      (error, response) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(response);
+    return new Promise((resolve, reject)=>{
+      calendar.events.list(
+        {
+          calendarId: calendar_id,
+          auth: oAuth2Client,
+          timeMin: new Date().toISOString(),
+          singleEvents: true,
+          orderBy: "startTime",
+        },
+        (error, response) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(response);
+          }
         }
-      }
-    );
-  })
-    .then((results) => {
+      );
+    }).then((results) => {
+      // Respond with OAuth token
       return {
         statusCode: 200,
         headers: {
-          'Access-Control-Allow-Origin': '*',
+          "Access-Control-Allow-Origin": "*",
         },
-        body: JSON.stringify({
-          events: results.data.items,
-        }),
+        body: JSON.stringify({ events: results.data.items }),
       };
     })
     .catch((err) => {
+      // Handle error
       console.error(err);
       return {
         statusCode: 500,
