@@ -1,5 +1,3 @@
-// src/Event.js
-
 import React, { Component } from 'react';
 
 class Event extends Component {
@@ -17,8 +15,8 @@ class Event extends Component {
     }
 
     render() {
-        const { summary, location, description, link } = this.props.content;
-        const date = this.props.content.start.dateTime;
+        const { summary, location, description, link } = this.props.event;
+        const date = this.props.event.start.dateTime;
 
         let details;
         if (this.state.showDetails) {
