@@ -29,7 +29,7 @@ class="btn-text"
 </div>
 </div>
 <a
-href="https://glenzy.github.io/meet/privacy.html"
+href="https://vaishnavaohio.github.io/meet/privacy.html"
 rel="nofollow noopener"
 >
 Privacy policy
