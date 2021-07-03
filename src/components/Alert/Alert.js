@@ -21,41 +21,5 @@ class Alert extends Component {
     }
 }
 
-class InfoAlert extends Alert {
-    constructor(props) {
-        super(props);
-        this.color = 'blue';
-    }
 
-    getStyle = () => {
-        return {
-            color: this.color,
-            fontWeight: 'bold',
-            fontSize: '0.7rem'
-        };
-    }
-}
-
-class ErrorAlert extends Alert {
-    constructor(props) {
-        super(props);
-        this.color = 'red';
-    }
-
-    getStyle = () => {
-        return {
-            color: this.color,
-            fontWeight: 'bold',
-            fontSize: '0.7rem'
-        };
-    }
-}
-
-class WarningAlert extends Alert {
-    constructor(props) {
-        super(props);
-        this.color = 'Orange';
-    }
-}
-
-export {InfoAlert, ErrorAlert, WarningAlert};
+export {Alert};

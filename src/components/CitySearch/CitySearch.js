@@ -4,18 +4,19 @@ import { InfoAlert } from '../Alert/Alert';
 export default class CitySearch extends Component {
     state = {
         query: '',
+        infoText: 'testing',
         suggestions: [],
-        showSuggestions: false,
-        infoText: ''
+        showSuggestions: false
     }
 
     handleInputChanged = (event) => {
         const value = event.target.value;
+        console.log(event);
         const suggestions = this.props.locations.filter((location) => {
             return location.toUpperCase().indexOf(value.toUpperCase()) > -1;
         });
-        console.log(suggestions.length);
-        if (suggestions.length === 0) {
+        console.log(suggestions);
+        if (this.state.query === '') {
             this.setState({
                 query: value,
                 suggestions,
@@ -41,19 +42,18 @@ export default class CitySearch extends Component {
     }
 
     render() {
-        const {query, suggestions, showSuggestions} = this.state;
+        const {infoText, query, suggestions, showSuggestions} = this.state;
         return (
             <div className="CitySearch">
-                <InfoAlert text={this.state.infoText} />
+                <InfoAlert text={infoText} />
                 <div className="SearchContainer">
                 <label>Cities:
-                <input type="text"
-                className="city"
-                value={query}
-                placeholder="Search for city"
-                onChange={this.handleInputChanged}
-                onFocus={() => {this.setState({showSuggestions: true})}}
-                />
+                <input
+          type="text"
+          className="city"
+          value={query}
+          onChange={this.handleInputChanged}
+        />
                 </label>
 
                 <ul className="suggestions" style={showSuggestions ? {}: {display: 'none'}}>
